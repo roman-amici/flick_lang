@@ -1,8 +1,9 @@
+use crate::common::span_identifier::SpanIdentifier;
 use crate::lexer::lexer_error::LexerError;
 use crate::lexer::token::*;
-use logos::Lexer;
 use logos::Logos;
 use logos::Span;
+use std::rc::Rc;
 
 #[derive(Logos, Debug, PartialEq, Clone, Copy)]
 enum LogosToken {
@@ -78,8 +79,8 @@ enum LogosToken {
     True,
     #[token("let")]
     Let,
-    #[token("mut")]
-    Mut,
+    #[token("var")]
+    Var,
     #[token("while")]
     While,
 
@@ -143,7 +144,7 @@ impl From<LogosToken> for TokenType {
             LogosToken::True => TokenType::True,
             LogosToken::False => TokenType::False,
             LogosToken::Let => TokenType::Let,
-            LogosToken::Mut => TokenType::Mut,
+            LogosToken::Var => TokenType::Var,
             LogosToken::While => TokenType::While,
 
             LogosToken::StringLiteral => TokenType::StringLiteral,
@@ -189,16 +190,16 @@ impl LogosLexer {
         }
     }
 
-    pub fn make_id(&self, value: &str, span: Span) -> SpanIdentifier {
+    pub fn make_id(&self, value: &str, span: Span) -> Rc<SpanIdentifier> {
         let start = span.start - self.line_span_start;
         let end = start + (span.end - span.start);
 
-        SpanIdentifier {
+        Rc::new(SpanIdentifier {
             filename: self.filename.clone(),
             line: self.line,
             span: (start, end),
             value: String::from(value),
-        }
+        })
     }
 
     pub fn new_line(&mut self, span: Span) {

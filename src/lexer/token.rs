@@ -1,3 +1,6 @@
+use crate::common::span_identifier::SpanIdentifier;
+use std::rc::Rc;
+
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum TokenType {
     LeftParen,
@@ -36,7 +39,7 @@ pub enum TokenType {
     True,
     False,
     Let,
-    Mut,
+    Var,
     While,
 
     StringLiteral,
@@ -47,13 +50,6 @@ pub enum TokenType {
 
 pub struct Token {
     pub token_type: TokenType,
-    pub id: SpanIdentifier,
+    pub id: Rc<SpanIdentifier>,
     pub literal_value: Option<String>,
-}
-
-pub struct SpanIdentifier {
-    pub filename: String,
-    pub line: usize,
-    pub span: (usize, usize),
-    pub value: String,
 }

@@ -1,11 +1,12 @@
-use crate::lexer::token::SpanIdentifier;
+use crate::common::span_identifier::SpanIdentifier;
 use std::fmt;
 use std::fmt::Debug;
 use std::fmt::Display;
+use std::rc::Rc;
 
 // TODO: display result
 pub struct LexerError {
-    pub id: SpanIdentifier,
+    pub id: Rc<SpanIdentifier>,
     pub message: String,
 }
 
